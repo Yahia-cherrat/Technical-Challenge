@@ -14,7 +14,7 @@ export const useContractArticleStore = defineStore('contractArticle', {
     actions: {
         async fetchArticles() {
             const response = await axios.get<Article[]>('/api/contract-articles')
-            console.log('Fetched articles:', response.data);
+            // console.log('Fetched articles:', response.data);
             this.articles = response.data
         },
         async addArticle(article: Omit<Article, 'id'>) {
