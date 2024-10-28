@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
     import { ref } from 'vue'
-    import { useEmployeeStore } from '@/store/employeeStore'
+    import { useEmployeeStore } from '../store/employeeStore'
 
     const store = useEmployeeStore()
     const employee = ref({ name: '', position: '' })

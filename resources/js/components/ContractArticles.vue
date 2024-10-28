@@ -151,46 +151,58 @@ export default defineComponent({
         }
 
         const downloadContractsWithEmployeeInfo = () => {
-            selectedContracts.value.forEach((id) => {
-                const article = articles.value.find((a) => a.id === id)
+            const doc = new jsPDF();
+            let yOffset = 20; // Starting Y position for content
+
+            // Set Title for Contract Document
+            doc.setFontSize(16);
+            doc.text("Contract Document", 105, yOffset, { align: "center" });
+            yOffset += 20;
+
+            // Employee Information Section
+            doc.setFontSize(12);
+            doc.text("Employee Information", 10, yOffset);
+            doc.setFontSize(10);
+            yOffset += 10;
+            doc.text(`Name: ${employeeInfo.value.name}`, 10, yOffset);
+            yOffset += 10;
+            doc.text(`Position: ${employeeInfo.value.position}`, 10, yOffset);
+            yOffset += 20; // Add some space before contract contents
+
+            // Add all selected contract articles on the same page
+            doc.setFontSize(12);
+            doc.text("Contracts:", 10, yOffset);
+            yOffset += 10;
+
+            // Loop through each selected contract and add content in a single section
+            selectedContracts.value.forEach((id, index) => {
+                const article = articles.value.find((a) => a.id === id);
                 if (article) {
-                    const doc = new jsPDF()
+                    // Add article title and content
+                    doc.setFontSize(11);
+                    doc.text(`Contract: ${article.title}`, 10, yOffset);
+                    yOffset += 8;
 
-                    // Set Title for Contract Page
-                    doc.setFontSize(16)
-                    doc.text("Contract", 105, 20, { align: "center" })
-
-                    // Employee Information Section
-                    doc.setFontSize(12)
-                    doc.text("Employee Information", 10, 40)
-                    doc.setFontSize(10)
-                    doc.text(`Name: ${employeeInfo.value.name}`, 10, 50)
-                    doc.text(`Position: ${employeeInfo.value.position}`, 10, 60)
-
-                    // Content of the Contract Body
-                    doc.setFontSize(12)
-                    doc.text("Content:", 10, 100)
-                    doc.setFontSize(10)
-                    let contentY = 110
-                    const lineHeight = 7
-
-                    // Split text into lines that fit within the page width, starting at contentY
-                    const lines = doc.splitTextToSize(article.content, 180)
+                    // Content
+                    const lines = doc.splitTextToSize(article.content, 180);
                     lines.forEach((line) => {
-                        if (contentY > 280) {
-                            doc.addPage() // Add new page if content exceeds page limit
-                            contentY = 20
+                        if (yOffset > 280) {
+                            // If content overflows, reduce font size slightly and reflow text
+                            doc.setFontSize(9);
+                            yOffset = 80; // Add extra space at bottom if overflow
                         }
-                        doc.text(line, 10, contentY)
-                        contentY += lineHeight
-                    })
+                        doc.text(line, 10, yOffset);
+                        yOffset += 6;
+                    });
 
-                    // Save PDF with title as filename
-                    const sanitizedTitle = article.title.replace(/\s+/g, '_')
-                    doc.save(`contract_${sanitizedTitle}.pdf`)
+                    yOffset += 10; // Add spacing between articles
                 }
             })
-            closeEmployeeModal()
+            // Save the PDF
+            doc.save(`Contract_Document.pdf`);
+
+            // Close modal after download
+            closeEmployeeModal();
         }
 
         return {

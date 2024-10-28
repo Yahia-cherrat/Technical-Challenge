@@ -16,12 +16,11 @@
     import { ref } from 'vue';
 
     const buttonText = ref('delete');
-    
+
     const fetchData = () => {
         console.log('fetched data');
     }
     const handleButtonClick = () => {
-        // console.log('button clicked')
         fetchData();
     }
 </script>
