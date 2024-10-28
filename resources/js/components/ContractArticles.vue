@@ -102,7 +102,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed } from 'vue'
-import { useContractArticleStore } from '@/store/contractArticles'
+import { useContractArticleStore } from '../store/contractArticles'
 import { jsPDF } from 'jspdf'
 
 export default defineComponent({
@@ -167,25 +167,15 @@ export default defineComponent({
                     doc.text(`Name: ${employeeInfo.value.name}`, 10, 50)
                     doc.text(`Position: ${employeeInfo.value.position}`, 10, 60)
 
-                    // // Contract Details Section
-                    // doc.setFontSize(12)
-                    // doc.text("Contract Details", 10, 80)
-
-                    // // Object/Title of Contract
-                    // doc.setFontSize(12)
-                    // doc.text("Object:", 10, 90)
-                    // doc.setFontSize(10)
-                    // doc.text(article.title, 30, 90)
-
                     // Content of the Contract Body
                     doc.setFontSize(12)
                     doc.text("Content:", 10, 100)
                     doc.setFontSize(10)
-                    let contentY = 110 // Starting y-coordinate for the content
-                    const lineHeight = 7 // Adjust line height for readability
+                    let contentY = 110
+                    const lineHeight = 7
 
                     // Split text into lines that fit within the page width, starting at contentY
-                    const lines = doc.splitTextToSize(article.content, 180) // Wrap content text within 180 width
+                    const lines = doc.splitTextToSize(article.content, 180)
                     lines.forEach((line) => {
                         if (contentY > 280) {
                             doc.addPage() // Add new page if content exceeds page limit

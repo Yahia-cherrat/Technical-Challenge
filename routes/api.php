@@ -10,7 +10,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // ContractArticles Routes
-
 Route::get('/contract-articles', [ContractArticleController::class, 'index']);
 Route::post('/contract-articles', [ContractArticleController::class, 'store']);
 Route::get('/contract-articles/{id}', [ContractArticleController::class, 'show']);
